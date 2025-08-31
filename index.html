@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>QuarantineTiers - Rankings</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #121212;
+      color: #eee;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background-color: #1f1f1f;
+      padding: 20px;
+      text-align: center;
+      font-size: 2em;
+      font-weight: bold;
+      letter-spacing: 2px;
+    }
+    nav {
+      display: flex;
+      justify-content: center;
+      background-color: #222;
+      border-bottom: 1px solid #444;
+      flex-wrap: wrap;
+    }
+    nav button {
+      background: none;
+      border: none;
+      color: #ccc;
+      padding: 15px 20px;
+      cursor: pointer;
+      font-size: 1em;
+      transition: color 0.3s;
+      margin: 2px;
+    }
+    nav button:hover, nav button.active {
+      color: #4caf50;
+      font-weight: bold;
+      border-bottom: 2px solid #4caf50;
+    }
+    main {
+      max-width: 900px;
+      margin: 30px auto;
+      padding: 0 20px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      padding: 12px 10px;
+      border-bottom: 1px solid #333;
+      text-align: center;
+    }
+    th {
+      background-color: #222;
+      color: #4caf50;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .server-info, .date-info {
+      margin-top: 20px;
+      font-size: 1.1em;
+      text-align: center;
+      color: #aaa;
+    }
+  </style>
+</head>
+<body>
+  <header>QuarantineTiers</header>
+  <nav>
+    <button class="active" onclick="showCategory('Overall')">Overall</button>
+    <button onclick="showCategory('Vanilla')">Vanilla</button>
+    <button onclick="showCategory('UHC')">UHC</button>
+    <button onclick="showCategory('Pot')">Pot</button>
+    <button onclick="showCategory('Neth')">Neth</button>
+    <button onclick="showCategory('Sword')">Sword</button>
+    <button onclick="showCategory('Axe')">Axe</button>
+    <button onclick="showCategory('Mace')">Mace</button>
+    <button onclick="showCategory('cpvp')">CPvP</button>
+  </nav>
+  <main>
+    <div id="rankings-container">
+      <table id="rankings-table">
+        <thead>
+          <tr>
+            <th>Rank</th>
+            <th>Player</th>
+            <th>Region</th>
+            <th>Tier</th>
+            <th>Score</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Initial sample data will be replaced by JS -->
+        </tbody>
+      </table>
+    </div>
+    <div class="server-info">
+      <strong>Server IP:</strong> Eventmc.fun
+    </div>
+    <div class="date-info">
+      Saturday, August 31, 2025
+    </div>
+  </main>
+
+  <script>
+    // Function to switch categories and update table data
+    function showCategory(category) {
+      const buttons = document.querySelectorAll('nav button');
+      buttons.forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+
+      const tableBody = document.querySelector('#rankings-table tbody');
+      tableBody.innerHTML = '';
+
+      // Data for different categories with empty arrays for Vanilla, UHC, Pot, Sword, Axe, Mace
+      const data = {
+        Overall: [
+          {rank: 1, player: 'IloveDaisySomuch', region: 'AS', tier: 'Tier 2', score: ''},
+          {rank: 2, player: 'Hxriss', region: 'AS', tier: 'Tier 3', score: ''},
+          {rank: 3, player: 'NeverFears', region: 'AS', tier: 'Tier 3', score: ''},
+          {rank: 4, player: 'HurryFlux', region: 'AS', tier: 'Tier 3', score: ''},
+          {rank: 5, player: 'Its Reality', region: 'AS', tier: 'Tier 3', score: ''},
+          {rank: 6, player: 'RogueXAli', region: 'AS', tier: 'Tier 3', score: ''},
+          {rank: 7, player: 'NotRexyGamer', region: 'AS', tier: 'Tier 3', score: ''},
+          {rank: 8, player: 'hardstucklt4_swift', region: 'AS', tier: 'Tier 4', score: ''},
+          {rank: 9, player: 'MikeyKun', region: 'AS', tier: 'Tier 4', score: ''},
+          {rank: 10, player: 'Itachi', region: 'AS', tier: 'Tier 4', score: ''},
+          {rank: 11, player: 'SoftAmie', region: 'AS', tier: 'Tier 4', score: ''},
+          {rank: 12, player: 'YourEternalSof', region: 'AS', tier: 'Tier 4', score: ''},
+          {rank: 13, player: 'ZensiePie', region: 'AS', tier: 'Tier 4', score: ''},
+          {rank: 14, player: 'tbnrmeer', region: 'AS', tier: 'Tier 4', score: ''},
+        ],
+        Vanilla: [],
+        UHC: [],
+        Pot: [],
+        Neth: [
+          {rank: 1, player: 'IloveDaisySomuch', region: 'AS', tier: 'Tier 2', score: ''},
+          {rank: 2, player: 'Hxriss', region: 'AS', tier: 'Tier 3', score: ''},
+          {rank: 3, player: 'NeverFears', region: 'AS', tier: 'Tier 3', score: ''},
+          {rank: 4, player: 'HurryFlux', region: 'AS', tier: 'Tier 3', score: ''},
+          {rank: 5, player: 'Its Reality', region: 'AS', tier: 'Tier 3', score: ''},
+          {rank: 6, player: 'RogueXAli', region: 'AS', tier: 'Tier 3', score: ''},
+          {rank: 7, player: 'NotRexyGamer', region: 'AS', tier: 'Tier 3', score: ''},
+          {rank: 8, player: 'hardstucklt4_swift', region: 'AS', tier: 'Tier 4', score: ''},
+          {rank: 9, player: 'MikeyKun', region: 'AS', tier: 'Tier 4', score: ''},
+          {rank: 10, player: 'Itachi', region: 'AS', tier: 'Tier 4', score: ''},
+          {rank: 11, player: 'SoftAmie', region: 'AS', tier: 'Tier 4', score: ''},
+          {rank: 12, player: 'YourEternalSof', region: 'AS', tier: 'Tier 4', score: ''},
+          {rank: 13, player: 'ZensiePie', region: 'AS', tier: 'Tier 4', score: ''},
+        ],
+        Sword: [],
+        Axe: [],
+        Mace: [],
+        cpvp: [
+          {rank: 1, player: 'tbnrmeer', region: 'AS', tier: 'Tier 4', score: ''},
+        ],
+      };
+
+      const categoryData = data[category] || [];
+
+      categoryData.forEach(item => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${item.rank}</td>
+          <td>${item.player}</td>
+          <td>${item.region}</td>
+          <td>${item.tier}</td>
+          <td>${item.score}</td>
+        `;
+        tableBody.appendChild(row);
+      });
+    }
+
+    // Initialize with Overall category on page load
+    window.onload = () => {
+      showCategory('Overall');
+    };
+  </script>
+</body>
+</html>
