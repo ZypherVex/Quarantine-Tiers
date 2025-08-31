@@ -5,183 +5,925 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>QuarantineTiers - Rankings</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #121212;
-      color: #eee;
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+    
+    * {
       margin: 0;
       padding: 0;
+      box-sizing: border-box;
     }
+    
+    :root {
+      --bg-primary: #0a0a0a;
+      --bg-secondary: #111111;
+      --bg-tertiary: #1a1a1a;
+      --accent: #00ff88;
+      --accent-dim: #00cc6a;
+      --text-primary: #ffffff;
+      --text-secondary: #a0a0a0;
+      --text-muted: #666666;
+      --border: #2a2a2a;
+      --shadow: rgba(0, 255, 136, 0.1);
+      --glass-bg: rgba(255, 255, 255, 0.05);
+      --glass-border: rgba(255, 255, 255, 0.1);
+    }
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+    
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: 
+        radial-gradient(circle at 20% 50%, rgba(0, 255, 136, 0.03) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(0, 255, 136, 0.02) 0%, transparent 50%),
+        radial-gradient(circle at 40% 80%, rgba(0, 255, 136, 0.03) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: -1;
+    }
+    
     header {
-      background-color: #1f1f1f;
-      padding: 20px;
+      padding: 4rem 2rem 3rem;
       text-align: center;
-      font-size: 2em;
-      font-weight: bold;
-      letter-spacing: 2px;
+      background: linear-gradient(135deg, #000000 0%, #111111 50%, #1a1a1a 100%);
+      border-bottom: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
     }
+    
+    header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: 
+        radial-gradient(circle at 30% 20%, rgba(0, 255, 136, 0.15) 0%, transparent 60%),
+        radial-gradient(circle at 70% 80%, rgba(0, 255, 136, 0.1) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    
+    .header-content {
+      position: relative;
+      z-index: 2;
+    }
+    
+    .header-content h1 {
+      font-size: clamp(3rem, 6vw, 5rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      background: linear-gradient(135deg, var(--accent) 0%, #ffffff 50%, var(--accent) 100%);
+      background-size: 200% 200%;
+      animation: gradientShift 4s ease-in-out infinite;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 1rem;
+      text-shadow: 0 0 40px rgba(0, 255, 136, 0.3);
+      position: relative;
+    }
+    
+    .header-content h1::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100px;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+      border-radius: 2px;
+    }
+    
+    .header-content p {
+      color: var(--text-secondary);
+      font-size: 1.2rem;
+      font-weight: 300;
+      letter-spacing: 0.5px;
+      margin-top: 1rem;
+    }
+    
+    @keyframes gradientShift {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+    
     nav {
+      padding: 2rem;
       display: flex;
       justify-content: center;
-      background-color: #222;
-      border-bottom: 1px solid #444;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      background: var(--bg-secondary);
+      border-bottom: 1px solid var(--border);
+    }
+    
+    .nav-button {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.5rem;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 12px;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      backdrop-filter: blur(10px);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .nav-button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+      transition: left 0.5s;
+    }
+    
+    .nav-button:hover::before {
+      left: 100%;
+    }
+    
+    .nav-button:hover {
+      color: var(--text-primary);
+      border-color: var(--accent);
+      box-shadow: 0 4px 20px var(--shadow);
+      transform: translateY(-2px);
+    }
+    
+    .nav-button.active {
+      color: var(--accent);
+      border-color: var(--accent);
+      background: rgba(0, 255, 136, 0.1);
+      box-shadow: 0 4px 20px var(--shadow);
+    }
+    
+    .nav-button img {
+      width: 16px;
+      height: 16px;
+      filter: brightness(0.7);
+      transition: filter 0.3s ease;
+    }
+    
+    .nav-button:hover img,
+    .nav-button.active img {
+      filter: brightness(1);
+    }
+    
+    main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 3rem 2rem;
+    }
+    
+    .rankings-grid {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    }
+    
+    .rankings-container {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+    
+    .tier-section {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      padding: 2rem;
+      backdrop-filter: blur(20px);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .tier-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent), var(--accent-dim));
+    }
+    
+    .tier-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+    
+    .tier-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+    
+    .tier-gamemode {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--bg-tertiary);
+      padding: 0.5rem 1rem;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+    
+    .tier-gamemode img {
+      width: 16px;
+      height: 16px;
+      filter: brightness(0.8);
+    }
+    
+    .tier-players {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    }
+    
+    .player-card {
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.2rem;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .player-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent), var(--accent-dim));
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    
+    .player-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px var(--shadow);
+      border-color: var(--accent);
+    }
+    
+    .player-card:hover::before {
+      opacity: 1;
+    }
+    
+    .player-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    
+    .player-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      border: 2px solid var(--border);
+      transition: border-color 0.3s ease;
+    }
+    
+    .player-card:hover .player-avatar {
+      border-color: var(--accent);
+    }
+    
+    .player-info h3 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+    
+    .player-meta {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
       flex-wrap: wrap;
     }
-    nav button {
+    
+    .rank-badge {
+      background: linear-gradient(135deg, var(--accent), var(--accent-dim));
+      color: var(--bg-primary);
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      min-width: 2rem;
+      text-align: center;
+    }
+    
+    .tier-badge {
+      background: var(--bg-tertiary);
+      color: var(--text-secondary);
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      border: 1px solid var(--border);
+    }
+    
+    .region-badge {
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+    
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(10px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .modal-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+    
+    .modal {
+      background: var(--bg-secondary);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      padding: 2rem;
+      max-width: 500px;
+      width: 90%;
+      position: relative;
+      transform: scale(0.9) translateY(20px);
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .modal-overlay.active .modal {
+      transform: scale(1) translateY(0);
+    }
+    
+    .modal-close {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
       background: none;
       border: none;
-      color: #ccc;
-      padding: 15px 20px;
+      color: var(--text-secondary);
+      font-size: 1.5rem;
       cursor: pointer;
-      font-size: 1em;
-      transition: color 0.3s;
-      margin: 2px;
+      width: 2rem;
+      height: 2rem;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
     }
-    nav button:hover, nav button.active {
-      color: #4caf50;
-      font-weight: bold;
-      border-bottom: 2px solid #4caf50;
+    
+    .modal-close:hover {
+      color: var(--text-primary);
+      background: var(--bg-tertiary);
     }
-    main {
-      max-width: 900px;
-      margin: 30px auto;
-      padding: 0 20px;
+    
+    .modal-player-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
     }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 20px;
+    
+    .modal-avatar {
+      width: 64px;
+      height: 64px;
+      border-radius: 16px;
+      border: 2px solid var(--accent);
     }
-    th, td {
-      padding: 12px 10px;
-      border-bottom: 1px solid #333;
+    
+    .modal-player-info h2 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+    
+    .modal-stats {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    }
+    
+    .stat-item {
+      background: var(--bg-tertiary);
+      padding: 1rem;
+      border-radius: 12px;
+      border: 1px solid var(--border);
       text-align: center;
     }
-    th {
-      background-color: #222;
-      color: #4caf50;
+    
+    .stat-label {
+      color: var(--text-secondary);
+      font-size: 0.8rem;
+      font-weight: 500;
+      margin-bottom: 0.5rem;
       text-transform: uppercase;
-      letter-spacing: 1px;
+      letter-spacing: 0.5px;
     }
-    .server-info, .date-info {
-      margin-top: 20px;
-      font-size: 1.1em;
+    
+    .stat-value {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--accent);
+    }
+    
+    .empty-state {
       text-align: center;
-      color: #aaa;
+      padding: 4rem 2rem;
+      color: var(--text-muted);
+    }
+    
+    .empty-state-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      opacity: 0.5;
+    }
+    
+    .footer {
+      margin-top: 4rem;
+      text-align: center;
+      padding: 2rem;
+      border-top: 1px solid var(--border);
+      background: var(--bg-secondary);
+    }
+    
+    .server-info {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+    }
+    
+    .date-info {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+    
+    .loading {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 200px;
+    }
+    
+    .loading-spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid var(--border);
+      border-top: 3px solid var(--accent);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    .fade-in {
+      animation: fadeIn 0.5s ease-out;
+    }
+    
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    @media (max-width: 768px) {
+      nav {
+        padding: 1rem;
+        gap: 0.25rem;
+      }
+      
+      .nav-button {
+        padding: 0.5rem 1rem;
+        font-size: 0.8rem;
+      }
+      
+      .nav-button img {
+        width: 14px;
+        height: 14px;
+      }
+      
+      main {
+        padding: 2rem 1rem;
+      }
+      
+      .rankings-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .tier-players {
+        grid-template-columns: 1fr;
+      }
+      
+      .modal {
+        margin: 1rem;
+        padding: 1.5rem;
+      }
+      
+      .modal-stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
     }
   </style>
 </head>
 <body>
-  <header>QuarantineTiers</header>
+  <header>
+    <div class="header-content">
+      <h1>QuarantineTiers</h1>
+      <p>Elite Player Rankings & Statistics</p>
+    </div>
+  </header>
+  
   <nav>
-    <button class="active" onclick="showCategory('Overall')">Overall</button>
-    <button onclick="showCategory('Vanilla')">Vanilla</button>
-    <button onclick="showCategory('UHC')">UHC</button>
-    <button onclick="showCategory('Pot')">Pot</button>
-    <button onclick="showCategory('Neth')">Neth</button>
-    <button onclick="showCategory('Sword')">Sword</button>
-    <button onclick="showCategory('Axe')">Axe</button>
-    <button onclick="showCategory('Mace')">Mace</button>
-    <button onclick="showCategory('cpvp')">CPvP</button>
+    <button class="nav-button active" onclick="showCategory('Overall', event)">
+      <img src="https://mctiers.com/tier_icons/overall.svg" alt="Overall">
+      <span>Overall</span>
+    </button>
+    <button class="nav-button" onclick="showCategory('Vanilla', event)">
+      <img src="https://mctiers.com/tier_icons/vanilla.svg" alt="Vanilla">
+      <span>Vanilla</span>
+    </button>
+    <button class="nav-button" onclick="showCategory('UHC', event)">
+      <img src="https://mctiers.com/tier_icons/overall.svg" alt="UHC">
+      <span>UHC</span>
+    </button>
+    <button class="nav-button" onclick="showCategory('Pot', event)">
+      <img src="https://mctiers.com/tier_icons/pot.svg" alt="Pot">
+      <span>Pot</span>
+    </button>
+    <button class="nav-button" onclick="showCategory('Neth', event)">
+      <img src="https://mctiers.com/tier_icons/nethop.svg" alt="Neth">
+      <span>Neth</span>
+    </button>
+    <button class="nav-button" onclick="showCategory('Sword', event)">
+      <img src="https://mctiers.com/tier_icons/sword.svg" alt="Sword">
+      <span>Sword</span>
+    </button>
+    <button class="nav-button" onclick="showCategory('Axe', event)">
+      <img src="https://mctiers.com/tier_icons/axe.svg" alt="Axe">
+      <span>Axe</span>
+    </button>
+    <button class="nav-button" onclick="showCategory('Mace', event)">
+      <img src="https://mctiers.com/tier_icons/mace.svg" alt="Mace">
+      <span>Mace</span>
+    </button>
+    <button class="nav-button" onclick="showCategory('CPvP', event)">
+      <img src="https://mctiers.com/tier_icons/vanilla.svg" alt="CPvP">
+      <span>CPvP</span>
+    </button>
   </nav>
+  
   <main>
     <div id="rankings-container">
-      <table id="rankings-table">
-        <thead>
-          <tr>
-            <th>Rank</th>
-            <th>Player</th>
-            <th>Region</th>
-            <th>Tier</th>
-            <th>Score</th>
-          </tr>
-        </thead>
-        <tbody>
-          <!-- Initial sample data will be replaced by JS -->
-        </tbody>
-      </table>
-    </div>
-    <div class="server-info">
-      <strong>Server IP:</strong> Eventmc.fun
-    </div>
-    <div class="date-info">
-      Saturday, August 31, 2025
+      <div id="rankings-content">
+        <!-- Content will be populated here -->
+      </div>
     </div>
   </main>
-
+  
+  <footer class="footer">
+    <div class="server-info">Server: Eventmc.fun</div>
+    <div class="date-info">Last Updated: Saturday, August 31, 2025</div>
+  </footer>
+  
+  <div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
+    <div class="modal" onclick="event.stopPropagation()">
+      <button class="modal-close" onclick="closeModal()">&times;</button>
+      <div class="modal-player-header">
+        <img class="modal-avatar" id="modal-avatar" src="" alt="">
+        <div class="modal-player-info">
+          <h2 id="modal-player-name"></h2>
+          <div class="player-meta">
+            <span class="region-badge" id="modal-region"></span>
+          </div>
+        </div>
+      </div>
+      <div class="modal-stats">
+        <div class="stat-item">
+          <div class="stat-label">Rank</div>
+          <div class="stat-value" id="modal-rank"></div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-label">Tier</div>
+          <div class="stat-value" id="modal-tier"></div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-label">Category</div>
+          <div class="stat-value" id="modal-category"></div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-label">Score</div>
+          <div class="stat-value" id="modal-score"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
   <script>
-    // Function to switch categories and update table data
-    function showCategory(category) {
-      const buttons = document.querySelectorAll('nav button');
-      buttons.forEach(btn => btn.classList.remove('active'));
-      event.target.classList.add('active');
-
-      const tableBody = document.querySelector('#rankings-table tbody');
-      tableBody.innerHTML = '';
-
-      // Data for different categories with empty arrays for Vanilla, UHC, Pot, Sword, Axe, Mace
-      const data = {
-        Overall: [
-          {rank: 1, player: 'IloveDaisySomuch', region: 'AS', tier: 'Tier 2', score: ''},
-          {rank: 2, player: 'Hxriss', region: 'AS', tier: 'Tier 3', score: ''},
-          {rank: 3, player: 'NeverFears', region: 'AS', tier: 'Tier 3', score: ''},
-          {rank: 4, player: 'HurryFlux', region: 'AS', tier: 'Tier 3', score: ''},
-          {rank: 5, player: 'Its Reality', region: 'AS', tier: 'Tier 3', score: ''},
-          {rank: 6, player: 'RogueXAli', region: 'AS', tier: 'Tier 3', score: ''},
-          {rank: 7, player: 'NotRexyGamer', region: 'AS', tier: 'Tier 3', score: ''},
-          {rank: 8, player: 'hardstucklt4_swift', region: 'AS', tier: 'Tier 4', score: ''},
-          {rank: 9, player: 'MikeyKun', region: 'AS', tier: 'Tier 4', score: ''},
-          {rank: 10, player: 'Itachi', region: 'AS', tier: 'Tier 4', score: ''},
-          {rank: 11, player: 'SoftAmie', region: 'AS', tier: 'Tier 4', score: ''},
-          {rank: 12, player: 'YourEternalSof', region: 'AS', tier: 'Tier 4', score: ''},
-          {rank: 13, player: 'ZensiePie', region: 'AS', tier: 'Tier 4', score: ''},
-          {rank: 14, player: 'tbnrmeer', region: 'AS', tier: 'Tier 4', score: ''},
-        ],
-        Vanilla: [],
-        UHC: [],
-        Pot: [],
-        Neth: [
-          {rank: 1, player: 'IloveDaisySomuch', region: 'AS', tier: 'Tier 2', score: ''},
-          {rank: 2, player: 'Hxriss', region: 'AS', tier: 'Tier 3', score: ''},
-          {rank: 3, player: 'NeverFears', region: 'AS', tier: 'Tier 3', score: ''},
-          {rank: 4, player: 'HurryFlux', region: 'AS', tier: 'Tier 3', score: ''},
-          {rank: 5, player: 'Its Reality', region: 'AS', tier: 'Tier 3', score: ''},
-          {rank: 6, player: 'RogueXAli', region: 'AS', tier: 'Tier 3', score: ''},
-          {rank: 7, player: 'NotRexyGamer', region: 'AS', tier: 'Tier 3', score: ''},
-          {rank: 8, player: 'hardstucklt4_swift', region: 'AS', tier: 'Tier 4', score: ''},
-          {rank: 9, player: 'MikeyKun', region: 'AS', tier: 'Tier 4', score: ''},
-          {rank: 10, player: 'Itachi', region: 'AS', tier: 'Tier 4', score: ''},
-          {rank: 11, player: 'SoftAmie', region: 'AS', tier: 'Tier 4', score: ''},
-          {rank: 12, player: 'YourEternalSof', region: 'AS', tier: 'Tier 4', score: ''},
-          {rank: 13, player: 'ZensiePie', region: 'AS', tier: 'Tier 4', score: ''},
-        ],
-        Sword: [],
-        Axe: [],
-        Mace: [],
-        cpvp: [
-          {rank: 1, player: 'tbnrmeer', region: 'AS', tier: 'Tier 4', score: ''},
-        ],
-      };
-
-      const categoryData = data[category] || [];
-
-      categoryData.forEach(item => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-          <td>${item.rank}</td>
-          <td>${item.player}</td>
-          <td>${item.region}</td>
-          <td>${item.tier}</td>
-          <td>${item.score}</td>
-        `;
-        tableBody.appendChild(row);
-      });
-    }
-
-    // Initialize with Overall category on page load
-    window.onload = () => {
-      showCategory('Overall');
+    let currentCategory = 'Overall';
+    
+    const gamemodeIcons = {
+      'Overall': 'https://mctiers.com/tier_icons/overall.svg',
+      'Vanilla': 'https://mctiers.com/tier_icons/vanilla.svg',
+      'UHC': 'https://mctiers.com/tier_icons/overall.svg',
+      'Pot': 'https://mctiers.com/tier_icons/pot.svg',
+      'Neth': 'https://mctiers.com/tier_icons/nethop.svg',
+      'Sword': 'https://mctiers.com/tier_icons/sword.svg',
+      'Axe': 'https://mctiers.com/tier_icons/axe.svg',
+      'Mace': 'https://mctiers.com/tier_icons/mace.svg',
+      'CPvP': 'https://mctiers.com/tier_icons/vanilla.svg'
     };
+    
+    const data = {
+      Overall: [
+        {rank: 1, player: 'IloveDaisySomuch', region: 'AS', tier: 'LT2 Neth', score: '2847'},
+        {rank: 2, player: 'Hxriss', region: 'AS', tier: 'LT3 Vanilla', score: '2634'},
+        {rank: 3, player: 'NeverFears', region: 'AS', tier: 'LT3 Neth', score: '2521'},
+        {rank: 4, player: 'HurryFlux', region: 'AS', tier: 'LT3 UHC', score: '2398'},
+        {rank: 5, player: 'Its Reality', region: 'AS', tier: 'LT3 Neth', score: '2287'},
+        {rank: 6, player: 'RogueXAli', region: 'AS', tier: 'LT3 Pot', score: '2156'},
+        {rank: 7, player: 'NotRexyGamer', region: 'AS', tier: 'LT3 Sword', score: '2043'},
+        {rank: 8, player: 'hardstucklt4_swift', region: 'AS', tier: 'LT4 Mace', score: '1934'},
+        {rank: 9, player: 'MikeyKun', region: 'AS', tier: 'LT4 Pot', score: '1867'},
+        {rank: 10, player: 'Itachi', region: 'AS', tier: 'LT4 Sword', score: '1756'},
+        {rank: 11, player: 'SoftAmie', region: 'AS', tier: 'LT4 Axe', score: '1645'},
+        {rank: 12, player: 'YourEternalSof', region: 'AS', tier: 'LT4 Mace', score: '1534'},
+        {rank: 13, player: 'ZensiePie', region: 'AS', tier: 'LT4 Axe', score: '1423'},
+        {rank: 14, player: 'tbnrmeer', region: 'AS', tier: 'LT4 CPvP', score: '1312'},
+      ],
+      Vanilla: [
+        {rank: 1, player: 'IloveDaisySomuch', region: 'AS', tier: 'LT2 Vanilla', score: '2847'},
+        {rank: 2, player: 'Hxriss', region: 'AS', tier: 'LT3 Vanilla', score: '2634'},
+        {rank: 3, player: 'NeverFears', region: 'AS', tier: 'LT3 Vanilla', score: '2521'},
+        {rank: 4, player: 'RogueXAli', region: 'AS', tier: 'LT4 Vanilla', score: '2156'},
+        {rank: 5, player: 'MikeyKun', region: 'AS', tier: 'LT4 Vanilla', score: '1867'},
+      ],
+      UHC: [
+        {rank: 1, player: 'HurryFlux', region: 'AS', tier: 'LT3 UHC', score: '2398'},
+        {rank: 2, player: 'Its Reality', region: 'AS', tier: 'LT3 UHC', score: '2287'},
+        {rank: 3, player: 'NotRexyGamer', region: 'AS', tier: 'LT4 UHC', score: '2043'},
+      ],
+      Pot: [
+        {rank: 1, player: 'RogueXAli', region: 'AS', tier: 'LT3 Pot', score: '2156'},
+        {rank: 2, player: 'MikeyKun', region: 'AS', tier: 'LT4 Pot', score: '1867'},
+        {rank: 3, player: 'Itachi', region: 'AS', tier: 'LT4 Pot', score: '1756'},
+        {rank: 4, player: 'SoftAmie', region: 'AS', tier: 'LT5 Pot', score: '1645'},
+      ],
+      Neth: [
+        {rank: 1, player: 'IloveDaisySomuch', region: 'AS', tier: 'LT2 Neth', score: '3156'},
+        {rank: 2, player: 'Hxriss', region: 'AS', tier: 'LT3 Neth', score: '2943'},
+        {rank: 3, player: 'NeverFears', region: 'AS', tier: 'LT3 Neth', score: '2837'},
+        {rank: 4, player: 'HurryFlux', region: 'AS', tier: 'LT3 Neth', score: '2721'},
+        {rank: 5, player: 'Its Reality', region: 'AS', tier: 'LT3 Neth', score: '2605'},
+        {rank: 6, player: 'RogueXAli', region: 'AS', tier: 'LT3 Neth', score: '2489'},
+        {rank: 7, player: 'NotRexyGamer', region: 'AS', tier: 'LT4 Neth', score: '2373'},
+        {rank: 8, player: 'hardstucklt4_swift', region: 'AS', tier: 'LT4 Neth', score: '2257'},
+        {rank: 9, player: 'MikeyKun', region: 'AS', tier: 'LT4 Neth', score: '2141'},
+        {rank: 10, player: 'Itachi', region: 'AS', tier: 'LT4 Neth', score: '2025'},
+        {rank: 11, player: 'SoftAmie', region: 'AS', tier: 'LT4 Neth', score: '1909'},
+        {rank: 12, player: 'YourEternalSof', region: 'AS', tier: 'LT5 Neth', score: '1793'},
+        {rank: 13, player: 'ZensiePie', region: 'AS', tier: 'LT5 Neth', score: '1677'},
+      ],
+      Sword: [
+        {rank: 1, player: 'NotRexyGamer', region: 'AS', tier: 'LT3 Sword', score: '2043'},
+        {rank: 2, player: 'hardstucklt4_swift', region: 'AS', tier: 'LT4 Sword', score: '1934'},
+        {rank: 3, player: 'Itachi', region: 'AS', tier: 'LT4 Sword', score: '1756'},
+        {rank: 4, player: 'ZensiePie', region: 'AS', tier: 'LT5 Sword', score: '1423'},
+      ],
+      Axe: [
+        {rank: 1, player: 'SoftAmie', region: 'AS', tier: 'LT4 Axe', score: '1645'},
+        {rank: 2, player: 'ZensiePie', region: 'AS', tier: 'LT4 Axe', score: '1423'},
+        {rank: 3, player: 'MikeyKun', region: 'AS', tier: 'LT5 Axe', score: '1867'},
+      ],
+      Mace: [
+        {rank: 1, player: 'hardstucklt4_swift', region: 'AS', tier: 'LT4 Mace', score: '1934'},
+        {rank: 2, player: 'YourEternalSof', region: 'AS', tier: 'LT4 Mace', score: '1534'},
+        {rank: 3, player: 'Hxriss', region: 'AS', tier: 'LT5 Mace', score: '1823'},
+      ],
+      CPvP: [
+        {rank: 1, player: 'tbnrmeer', region: 'AS', tier: 'LT4 CPvP', score: '1312'},
+        {rank: 2, player: 'MikeyKun', region: 'AS', tier: 'LT5 CPvP', score: '1247'},
+      ],
+    };
+    
+    function showCategory(category, event) {
+      // Update navigation
+      document.querySelectorAll('.nav-button').forEach(btn => btn.classList.remove('active'));
+      event.currentTarget.classList.add('active');
+      
+      currentCategory = category;
+      const container = document.getElementById('rankings-content');
+      
+      // Show loading
+      container.innerHTML = '<div class="loading"><div class="loading-spinner"></div></div>';
+      
+      setTimeout(() => {
+        const categoryData = data[category] || [];
+        container.innerHTML = '';
+        
+        if (categoryData.length === 0) {
+          container.innerHTML = `
+            <div class="empty-state">
+              <div class="empty-state-icon">📊</div>
+              <h3>No rankings available</h3>
+              <p>Check back later for ${category} rankings!</p>
+            </div>
+          `;
+          return;
+        }
+        
+        if (category === 'Overall') {
+          // For Overall, show simple grid without tier sections
+          const grid = document.createElement('div');
+          grid.className = 'rankings-grid';
+          
+          categoryData.forEach((player, index) => {
+            const card = document.createElement('div');
+            card.className = 'player-card fade-in';
+            card.style.animationDelay = `${index * 0.05}s`;
+            card.onclick = () => openModal(player, category);
+            
+            card.innerHTML = `
+              <div class="player-header">
+                <img class="player-avatar" src="https://mc-heads.net/avatar/${encodeURIComponent(player.player)}/48" alt="Avatar of ${player.player}">
+                <div class="player-info">
+                  <h3>${player.player}</h3>
+                  <div class="player-meta">
+                    <span class="rank-badge">#${player.rank}</span>
+                    <span class="tier-badge">${player.tier}</span>
+                    <span class="region-badge">${player.region}</span>
+                  </div>
+                </div>
+              </div>
+            `;
+            
+            grid.appendChild(card);
+          });
+          
+          container.appendChild(grid);
+        } else {
+          // For individual gamemodes, group players by tier
+          const tierGroups = {};
+          const tierOrder = ['LT1', 'LT2', 'LT3', 'LT4', 'LT5'];
+          
+          categoryData.forEach(player => {
+            // Extract tier level from tier string (e.g., "LT3 Neth" -> "LT3")
+            const tierLevel = player.tier.split(' ')[0];
+            if (!tierGroups[tierLevel]) {
+              tierGroups[tierLevel] = [];
+            }
+            tierGroups[tierLevel].push(player);
+          });
+          
+          // Sort each tier by rank
+          Object.keys(tierGroups).forEach(tier => {
+            tierGroups[tier].sort((a, b) => (a.rank || 0) - (b.rank || 0));
+          });
+          
+          // Create tier sections
+          tierOrder.forEach(tier => {
+            if (tierGroups[tier] && tierGroups[tier].length > 0) {
+              const tierSection = document.createElement('div');
+              tierSection.className = 'tier-section fade-in';
+              
+              tierSection.innerHTML = `
+                <div class="tier-header">
+                  <div class="tier-title">${tier}</div>
+                  <div class="tier-gamemode">
+                    <img src="${gamemodeIcons[category]}" alt="${category}">
+                    <span>${category}</span>
+                  </div>
+                </div>
+                <div class="tier-players">
+                </div>
+              `;
+              
+              container.appendChild(tierSection);
+              
+              const tierPlayersContainer = tierSection.querySelector('.tier-players');
+              
+              tierGroups[tier].forEach((player, index) => {
+                const card = document.createElement('div');
+                card.className = 'player-card fade-in';
+                card.style.animationDelay = `${index * 0.05}s`;
+                card.onclick = () => openModal(player, category);
+                
+                card.innerHTML = `
+                  <div class="player-header">
+                    <img class="player-avatar" src="https://mc-heads.net/avatar/${encodeURIComponent(player.player)}/48" alt="Avatar of ${player.player}">
+                    <div class="player-info">
+                      <h3>${player.player}</h3>
+                      <div class="player-meta">
+                        <span class="rank-badge">#${player.rank}</span>
+                        <span class="tier-badge">${player.tier}</span>
+                        <span class="region-badge">${player.region}</span>
+                      </div>
+                    </div>
+                  </div>
+                `;
+                
+                tierPlayersContainer.appendChild(card);
+              });
+            }
+          });
+        }
+      }, 300);
+    }
+    
+    function openModal(player, category) {
+      const modal = document.getElementById('modal-overlay');
+      const avatar = document.getElementById('modal-avatar');
+      const name = document.getElementById('modal-player-name');
+      const region = document.getElementById('modal-region');
+      const rank = document.getElementById('modal-rank');
+      const tier = document.getElementById('modal-tier');
+      const categoryEl = document.getElementById('modal-category');
+      const score = document.getElementById('modal-score');
+      
+      avatar.src = `https://mc-heads.net/avatar/${encodeURIComponent(player.player)}/64`;
+      avatar.alt = `Avatar of ${player.player}`;
+      name.textContent = player.player;
+      region.textContent = player.region;
+      rank.textContent = player.rank ? `#${player.rank}` : 'N/A';
+      tier.textContent = player.tier;
+      categoryEl.textContent = category;
+      score.textContent = player.score || 'N/A';
+      
+      modal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+    
+    function closeModal(event) {
+      if (event && event.target !== event.currentTarget && !event.target.classList.contains('modal-close')) {
+        return;
+      }
+      
+      const modal = document.getElementById('modal-overlay');
+      modal.classList.remove('active');
+      document.body.style.overflow = 'auto';
+    }
+    
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeModal();
+      }
+    });
+    
+    // Initialize page
+    window.addEventListener('load', () => {
+      showCategory('Overall', { currentTarget: document.querySelector('.nav-button.active') });
+    });
+    
+    // Smooth scroll behavior
+    document.documentElement.style.scrollBehavior = 'smooth';
   </script>
 </body>
 </html>
